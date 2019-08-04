@@ -8,7 +8,8 @@ class Person(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
 
     def __repr__(self):
-        return '<Person %r>' % self.username
+        return f"<Person {self.username}>"
+        # return '<Person %r>' % self.username
 
     def serialize(self):
         return {
