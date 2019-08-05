@@ -9,23 +9,23 @@ from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from models import db, Person
 
-app = Flask(__name__)
-app.url_map.strict_slashes = False
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DB_CONNECTION_STRING')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-MIGRATE = Migrate(app, db)
-db.init_app(app)
-CORS(app)
+APP = Flask(__name__)
+APP.url_map.strict_slashes = False
+APP.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DB_CONNECTION_STRING')
+APP.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+MIGRATE = Migrate(APP, db)
+db.init_app(APP)
+CORS(APP)
 
-@app.errorhandler(APIException)
+@APP.errorhandler(APIException)
 def handle_invalid_usage(error):
     return jsonify(error.to_dict()), error.status_code
 
-@app.route('/')
+@APP.route('/')
 def sitemap():
-    return generate_sitemap(app)
+    return generate_sitemap(APP)
 
-@app.route('/person', methods=['POST', 'GET'])
+@APP.route('/person', methods=['POST', 'GET'])
 def handle_person():
     """
     Create person and retrieve all persons
@@ -45,10 +45,14 @@ def handle_person():
         user1 = Person(username=body['username'], email=body['email'])
         db.session.add(user1)
         db.session.commit()
+        # all_people = Person.query.all()
+        # all_people = list(map(lambda x: x.serialize(), all_people))
+        # return jsonify(all_people), 200
         return "ok", 200
 
     # GET request
     if request.method == 'GET':
+        # return jsonify(request), 200
         all_people = Person.query.all()
         all_people = list(map(lambda x: x.serialize(), all_people))
         return jsonify(all_people), 200
@@ -56,7 +60,7 @@ def handle_person():
     return "Invalid Method", 404
 
 
-@app.route('/person/<int:person_id>', methods=['PUT', 'GET', 'DELETE'])
+@APP.route('/person/<int:person_id>', methods=['PUT', 'GET', 'DELETE'])
 def get_single_person(person_id):
     """
     Single person
@@ -101,11 +105,15 @@ def get_single_person(person_id):
 
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3000))
-    app.run(host='0.0.0.0', port=PORT)
+    APP.run(host='0.0.0.0', port=PORT)
 
 
 a = 'Homer'
 b = 54
+c = {
+    'one': 1,
+    'two': 2
+}
 
-
-print(f'{a} is {b}')
+print(f'{a} is {c}')
+print('hhhhhh')
