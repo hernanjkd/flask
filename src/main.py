@@ -23,7 +23,20 @@ def handle_invalid_usage(error):
 
 @APP.route('/')
 def sitemap():
-    return generate_sitemap(APP)
+    links = []
+    for rule in APP.url_map.iter_rules():
+        # Filter out rules we can't navigate to in a browser
+        # and rules that require parameters
+        if "GET" in rule.methods and has_no_empty_params(rule):
+            url = url_for(rule.endpoint, **(rule.defaults or {}))
+            links.append(url)
+
+    links_html = "".join(["<li>" + y + "</li>" for y in links])
+    return """
+        <div style="text-align: center;">
+        <img src='https://assets.breatheco.de/apis/img/4geeks/rigo-baby.jpg' />
+        <h1>Hello Rigo!!</h1>
+        This is your api home, remember to specify a real endpoint path like: <ul style="text-align: left;">"""+links_html+"</ul></div>"
 
 @APP.route('/person', methods=['POST', 'GET'])
 def handle_person():
@@ -109,4 +122,4 @@ if __name__ == '__main__':
     APP.run(host='0.0.0.0', port=PORT)
 
 
-print('hello')
+# print(app)
