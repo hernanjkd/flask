@@ -23,6 +23,12 @@ def handle_invalid_usage(error):
 
 @APP.route('/')
 def sitemap():
+
+    def has_no_empty_params(rule):
+        defaults = rule.defaults if rule.defaults is not None else ()
+        arguments = rule.arguments if rule.arguments is not None else ()
+        return len(defaults) >= len(arguments)
+
     links = []
     for rule in APP.url_map.iter_rules():
         # Filter out rules we can't navigate to in a browser
@@ -38,11 +44,10 @@ def sitemap():
         <h1>Hello Rigo!!</h1>
         This is your api home, remember to specify a real endpoint path like: <ul style="text-align: left;">"""+links_html+"</ul></div>"
 
+
+
 @APP.route('/person', methods=['POST', 'GET'])
 def handle_person():
-    """
-    Create person and retrieve all persons
-    """
 
     # POST request
     if request.method == 'POST':
@@ -65,8 +70,7 @@ def handle_person():
 
     # GET request
     if request.method == 'GET':
-        print(generate_sitemap(APP))
-        return str(generate_sitemap(APP)), 200
+        return "<div>yellow</div>", 200
         # all_people = Person.query.all()
         # all_people = list(map(lambda x: x.serialize(), all_people))
         # return jsonify(all_people), 200
