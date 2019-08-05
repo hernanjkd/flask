@@ -52,10 +52,11 @@ def handle_person():
 
     # GET request
     if request.method == 'GET':
-        # return jsonify(request), 200
-        all_people = Person.query.all()
-        all_people = list(map(lambda x: x.serialize(), all_people))
-        return jsonify(all_people), 200
+        print(request.method)
+        return str(type(request)), 200
+        # all_people = Person.query.all()
+        # all_people = list(map(lambda x: x.serialize(), all_people))
+        # return jsonify(all_people), 200
 
     return "Invalid Method", 404
 
@@ -108,12 +109,4 @@ if __name__ == '__main__':
     APP.run(host='0.0.0.0', port=PORT)
 
 
-a = 'Homer'
-b = 54
-c = {
-    'one': 1,
-    'two': 2
-}
-
-print(f'{a} is {c}')
-print('hhhhhh')
+print('hello')
