@@ -52,8 +52,8 @@ def handle_person():
 
     # GET request
     if request.method == 'GET':
-        print(request.method)
-        return str(type(request)), 200
+        print(generate_sitemap(APP))
+        return str(generate_sitemap(APP)), 200
         # all_people = Person.query.all()
         # all_people = list(map(lambda x: x.serialize(), all_people))
         # return jsonify(all_people), 200
